@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
         get
         {
             //게임매니저를 찾는 자가 있었다면.. 절대로 "없다"고 알려주면 안됩니다!
-            if (_instance == null)
+            if(_instance == null)
             {
                 //현재 이미 올려놓은 게임매니저가 있을 수 있지 않을까요?
                 //유니티에서 지금 가지고 있는 인스턴스를 찾을 수 있는 방법!
@@ -59,18 +59,19 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    //플레이어는... 하나가 아닐 수도 있다
+    //플레이어는.. 하나가 아닐 수도 있지 않을까?
     protected static List<ControllerBase> players = new List<ControllerBase>();
-    public static void PlayerAdd(ControllerBase newPlayer) { players.Add(newPlayer); }  //플레이어 추가
-    public static void PlayerRemove(ControllerBase target) { players.Remove(target); }  //플레이어 제거
-    
-    //리스트는 "목록"이라고 했어요! 배열이랑 똑같아요! 배열처럼 쓰면된다
-    public static ControllerBase PlayerFind(int index)  //플레이어 찾기
+
+    public static void PlayerAdd(ControllerBase newPlayer) { players.Add(newPlayer); }
+    public static void PlayerRemove(ControllerBase target) { players.Remove(target); }
+    //리스트는 "목록"이라고 했어요! 배열이랑 똑같아요!
+    public static ControllerBase PlayerFind(int index = 0)
     {
         if (index < 0 || index >= players.Count) return null;
+
         return players[index];
     }
-
+    
     void Start()
     {
         //왕좌에 오르려고 시도하는 거예요!
