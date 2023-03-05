@@ -22,13 +22,17 @@ public class CharacterBase : MonoBehaviour
     //get만 쓰는 경우가 많단 말이죠! => 반환값만 넣으면 get을 만들어줍니다!
     public float jumpPower => jumpValue * jumpMultiplier;
 
+    float lastMoveTime;
+
     [SerializeField] protected int      level = 1;
     [SerializeField] protected int      exp;
 
     //내가 바라보고 있는 방향!
     public Vector3 lookForward = Vector3.right;
     //내가 움직이고 있는지 여부!
-    public bool isMove = false;
+    protected bool isMove = false;
+    //                   마지막으로 움직인 시간과의 차이가  판단 시간보다 큰 경우! : 직전 판단에선 안 움직였네?
+    public bool Moving => Time.time - lastMoveTime <= Time.fixedDeltaTime;
 
     //Update는 종류가 3가지!
     //Update      : 게임 프레임에 맞춰 업데이트!
@@ -47,7 +51,6 @@ public class CharacterBase : MonoBehaviour
         //항상 정해진 시간을 꼭 준수하는 친구입니다!
         //이 친구가 약속한 시간이 중요한 거예요!
         OnMove(Time.fixedDeltaTime);
-        isMove = false;
     }
 
     protected virtual void OnMove(float passedTime)
@@ -58,7 +61,9 @@ public class CharacterBase : MonoBehaviour
             // 거리 = 속도 * 시간
             transform.position += lookForward * moveSpeedValue * moveSpeedMultiplier * passedTime;
 
-            //나 움직였으니까 이제 안 움직일래!
+            //내가 움직인 시간의 스탬프를 찍어놓는 거죠!
+            lastMoveTime = Time.time;
+
             isMove = false;
         };
     }
@@ -75,24 +80,56 @@ public class CharacterBase : MonoBehaviour
         //(7,1)     (0,0)   =  (-7,-1)
 
         // 목적지 - 출발지 = 목적지를 향해서 가는 방법!
-        lookForward = wantPosition - transform.position;
+        Vector3 direction = wantPosition - transform.position;
         //방향의 z축을 제거(2D기 때문!)
-        lookForward.z = 0;
+        direction.z = 0;
         //그 다음 크기를 1로 변경!
-        lookForward.Normalize();
+        direction.Normalize();
 
-        //네! 이제 움직일래요!
-        isMove = true;
+        //z를 제거해도 여전히 움직일 수 있어요!
+        if(direction.magnitude > 0)
+        {
+            //넣어주는 것까지 하셔야 해요!
+            lookForward = direction;
+        
+            //네! 이제 움직일래요!
+            isMove = true;
+        };
     }
 
+    //================================================
     Rigidbody2D rigid;
+    public List<Collider2D> floorList = new List<Collider2D>();
     void Start()
     {
         rigid = GetComponent<Rigidbody2D>();
     }
+
+    public virtual bool IsGround()
+    {
+        return floorList.Count > 0; //내 발 밑에 뭔가 있는데?
+    }
+
+    //                             부딪힌 대상의 Collider2D컴포넌트
+    //부딪히면 닿아있는 대상 목록 +
+    //떨어지면 닿아있다가 더 이상 아니니까! -
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        floorList.Add(collision);
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        floorList.Remove(collision);
+    }
+    //================================================
+
     public virtual void ClaimJump()             
     {
-        rigid.AddForce(Vector2.up * jumpPower);
+        if(IsGround())
+        {
+            rigid.AddForce(Vector3.up * jumpPower);
+        };
     }
 
     public virtual void ClaimRun(bool value)    {}
