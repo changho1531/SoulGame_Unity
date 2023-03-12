@@ -102,6 +102,5 @@ public class GameManager : MonoBehaviour
     // 업데이트라고 하는 친구는 프레임마다 할 일을 이야기합니다!
     void Update()
     {
-        Debug.Log("업데이트");
     }
 }

@@ -293,21 +293,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   inputs:
   - keyType: 0
-    code: 119
+    code: 273
   - keyType: 1
-    code: 115
+    code: 274
   - keyType: 2
-    code: 97
+    code: 276
   - keyType: 3
-    code: 100
+    code: 275
   - keyType: 4
     code: 304
   - keyType: 5
-    code: 32
+    code: 120
   - keyType: 6
-    code: 323
+    code: 122
   - keyType: 7
-    code: 324
+    code: 99
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -319,6 +319,7 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -392,6 +393,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &519420033
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdb3f9fe46d18234db0e442066036ed6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offset: {x: 0, y: 0, z: -10}
 --- !u!1 &606482184
 GameObject:
   m_ObjectHideFlags: 0
@@ -652,6 +666,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rightSideSprite: 1
+--- !u!114 &1227894306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1227894299}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edb2ad1d26ac4ef4093474af8d85b7b9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  attacks:
+  - attackName: "1\uBC88\uACF5\uACA9"
+    prefab: {fileID: 2599383993294403095, guid: e965d9b1d74d46844ac6d18fb4f30a8b, type: 3}
+    location: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 1, z: 1}
+    duration: 1
+  - attackName: "2\uBC88\uACF5\uACA9"
+    prefab: {fileID: 2599383993294403095, guid: e965d9b1d74d46844ac6d18fb4f30a8b, type: 3}
+    location: {x: 0, y: 0, z: 0}
+    size: {x: 2, y: 1, z: 1}
+    duration: 1
+  - attackName: "3\uBC88\uACF5\uACA9"
+    prefab: {fileID: 2599383993294403095, guid: e965d9b1d74d46844ac6d18fb4f30a8b, type: 3}
+    location: {x: 0, y: 0, z: 0}
+    size: {x: 1, y: 2, z: 1}
+    duration: 1
 --- !u!1 &1385006588
 GameObject:
   m_ObjectHideFlags: 0
@@ -957,6 +999,10 @@ PrefabInstance:
     - target: {fileID: 468313285843300416, guid: 9cdf74ed51f268f43a7d29a9c34b2a48, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 468313285843300417, guid: 9cdf74ed51f268f43a7d29a9c34b2a48, type: 3}
+      propertyPath: jumpCount
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 468313285843300417, guid: 9cdf74ed51f268f43a7d29a9c34b2a48, type: 3}
       propertyPath: jumpValue

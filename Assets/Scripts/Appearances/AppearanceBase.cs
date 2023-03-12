@@ -22,7 +22,13 @@ public class AppearanceBase : MonoBehaviour
         //Int Float Bool Trigger
 
         //타겟애니메이터의bool세팅 -> "isMove"를 캐릭터의 isMove로!
-        targetAnimator.SetBool("isMove", targetCharacter.Moving);
-        targetAnimator.SetBool("isGround", targetCharacter.IsGround());
+        targetAnimator.SetBool ("isMove", targetCharacter.Moving);
+        targetAnimator.SetBool ("isGround", targetCharacter.IsGround());
+        targetAnimator.SetFloat("VerticalSpeed", targetCharacter.velocity.y);
+    }
+
+    public virtual void SetAttack()
+    {
+        targetAnimator.SetTrigger("Attack");
     }
 }

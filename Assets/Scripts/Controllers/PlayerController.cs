@@ -37,5 +37,9 @@ public class PlayerController : ControllerBase
         {
             controlTarget.ClaimJump();
         };
+        if (InputManager.GetKeyDown(KeyType.Attack))
+        {
+            controlTarget.ClaimAttack();
+        };
     }
 }
