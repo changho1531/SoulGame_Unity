@@ -128,6 +128,24 @@ public class CharacterBase : MonoBehaviour
         appearance = GetComponentInChildren<AppearanceBase>();
         rigid = GetComponent<Rigidbody2D>();
     }
+    public virtual void ResetFloor() { floorList.Clear(); }
+    public virtual void AddVelocity(Vector3 force)
+    {
+        if (rigid) rigid.AddForce(force);
+    }
+    public virtual void SetVelocity(Vector3 force)
+    {
+        if (rigid) rigid.velocity = force;
+    }
+    public virtual void SetVerticalVelocity(float force)
+    {
+        if(rigid)
+        {
+            Vector3 result = rigid.velocity;//원본을 가져와서
+            result.y = force;               //y만 바꿀 거구
+            rigid.velocity = result;        //다시 넣어주기
+        };
+    }
 
     public virtual bool IsGround()
     {
@@ -158,7 +176,8 @@ public class CharacterBase : MonoBehaviour
     {
         if(IsGround())
         {
-            rigid.AddForce(Vector3.up * jumpPower);
+            AddVelocity(Vector3.up * jumpPower);
+            ResetFloor();
         }
         else if (jumpLeft > 0)
         {
@@ -170,9 +189,7 @@ public class CharacterBase : MonoBehaviour
 
             //velocity는 프로퍼티기 때문에, 전체를 한 번에 바꿔야 정상적으로 실행됩니다!
             //미리 정보를 빼놓았다가 정보를 수정해서 다시 넣어줘야 해요!
-            Vector3 originVelocity = rigid.velocity;
-            originVelocity.y = jumpAirPower;
-            rigid.velocity = originVelocity;
+            SetVerticalVelocity(jumpAirPower);
         };
     }
 
@@ -180,4 +197,22 @@ public class CharacterBase : MonoBehaviour
     public virtual void ClaimAttack()           { appearance?.SetAttack(); }
     public virtual void ClaimSkill()            {}
     public virtual void ClaimRoll()             {}
+
+    //데미지를 받기!
+    public virtual void TakeDamage(CharacterBase from, float damage)
+    {
+        //대상이 있긴 있는데, 쟤 나랑 동맹인데?
+        if (from && from.currentAlly == this.currentAlly) return;
+
+        //생명력을 줄입시다!
+        health.Current -= damage;
+    }
+    public virtual void TakeHeal(CharacterBase from, float heal)
+    {
+        //대상이 있긴 있는데, 쟤 나랑 동맹아인데?
+        if (from && from.currentAlly != this.currentAlly) return;
+
+        //생명력을 줄입시다!
+        health.Current += heal;
+    }
 }

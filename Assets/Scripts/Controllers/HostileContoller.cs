@@ -1,0 +1,33 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class HostileContoller : ControllerBase
+{
+    ControllerBase player;
+    void Update()
+    {
+        //플레이어를 모르겠다 ㅜㅜ 플레이어를 찾아가고!
+        if(player == null) player = GameManager.PlayerFind();
+
+        //플레이어를 찾았다면! 때리러 가기!
+        if(player != null)
+        {
+            //목적지 - 출발지
+            Vector3 toPlayer = player.transform.position - transform.position;
+            controlTarget.ClaimMove(player.transform.position);
+
+            //플레이어로 가는 길에.. y축이 0.5보다 큽니다..
+            if (toPlayer.y > 0.5f) controlTarget.ClaimJump();
+
+            //Mathf.Abs();
+
+            //레이캐스트는 선을 발사!
+            //선에 맞은 친구를 돌려받기!                   시작위치                     방향
+            RaycastHit2D hit = Physics2D.Raycast(controlTarget.transform.position, toPlayer);
+            //   맞은.트랜스폼!
+            //if(hit.transform == null)
+        };
+        //controlTarget.ClaimAttack();
+    }
+}
