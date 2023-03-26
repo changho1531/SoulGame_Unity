@@ -25,7 +25,7 @@ public enum Job : byte
 }
 public enum CrowdControl : byte
 {
-    None, Frozen, Poison, Slow, Stun, Sleep, KnockBack, Airborne
+    None, Frozen, Poison, Slow, Stun, Root
 }
 public enum KeyType : byte
 {

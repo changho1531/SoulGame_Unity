@@ -31,4 +31,14 @@ public class AppearanceBase : MonoBehaviour
     {
         targetAnimator.SetTrigger("Attack");
     }
+
+    public virtual void SetControllable(bool value)
+    {
+        targetAnimator.SetBool("Control", value);
+    }
+
+    public virtual void CharacterMovable(bool value)
+    {
+        targetCharacter.isMovable = value;
+    }
 }

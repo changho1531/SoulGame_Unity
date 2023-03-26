@@ -15,13 +15,13 @@ public class CharacterBase : MonoBehaviour
     //                                  실제로 움직이는 속도!
     [SerializeField] protected float    moveSpeedValue;
     //                                  속도의 배율!
-    [SerializeField] protected float    moveSpeedMultiplier = 1;
+    [SerializeField] public float       moveSpeedMultiplier = 1;
     //                                  점프값
     [SerializeField] protected float    jumpValue;
     //                                  점프 배율!
-    [SerializeField] protected float    jumpMultiplier = 1;
+    [SerializeField] public float       jumpMultiplier = 1;
     //                                  점프 개수
-    [SerializeField] protected int      jumpCount = 1;
+    [SerializeField] public int         jumpCount = 1;
     //                                  남은 점프
     protected int                       jumpLeft;
 
@@ -35,6 +35,8 @@ public class CharacterBase : MonoBehaviour
     [SerializeField] protected int      level = 1;
     [SerializeField] protected int      exp;
 
+    
+
     //내가 바라보고 있는 방향!
     public Vector3 lookForward = Vector3.right;
     //velocity : 속도
@@ -45,6 +47,34 @@ public class CharacterBase : MonoBehaviour
 
     //내가 움직이고 있는지 여부!
     protected bool isMove = false;
+
+    //컨트롤을 하는데요, 스택이 쌓여있으면 컨트롤이 불가능한 상태입니다!
+    //                     bool            byte
+    // 0.5초 짜리 기절       T               1
+    // 3초 짜리 기절         T               2
+    // 0.5초 후             F               1
+    // 3초 후               F               0
+    byte controlStack = 0;
+    //나는 행동을 제어할 수 있는가..?
+    public bool isControllable
+    {
+        //get { return controlStack <= 0; }
+        get => controlStack <= 0;
+        set
+        {
+            controlStack += (byte)(value ? -1 : 1);
+            //                        true : 움직일 수 있음! -1
+            appearance?.SetControllable(isControllable);
+        }
+    }
+
+    byte moveStack = 0;
+    public bool isMovable
+    {
+        get => moveStack <= 0;
+        set => moveStack += (byte)(value ? -1 : 1);
+    }
+
     //                   마지막으로 움직인 시간과의 차이가  판단 시간보다 큰 경우! : 직전 판단에선 안 움직였네?
     public bool Moving => Time.time - lastMoveTime <= Time.fixedDeltaTime;
 
@@ -77,10 +107,10 @@ public class CharacterBase : MonoBehaviour
     protected virtual void OnMove(float passedTime)
     {
         //난 움직이라고 할 때만 움직여!
-        if(isMove)
+        if(isMove && isControllable && isMovable)
         {
             // 거리 = 속도 * 시간
-            transform.position += lookForward * moveSpeedValue * moveSpeedMultiplier * passedTime;
+            transform.position += lookForward * moveSpeedValue * Mathf.Max(moveSpeedMultiplier, 0.1f) * passedTime;
 
             //내가 움직인 시간의 스탬프를 찍어놓는 거죠!
             lastMoveTime = Time.time;
@@ -93,6 +123,8 @@ public class CharacterBase : MonoBehaviour
     //Claim : 요청하다
     public virtual void ClaimMove(Vector3 wantPosition)
     {
+        if (isMovable == false || isControllable == false) return;
+
         //내가 저기까지 가야 한다면..
         //일단 그쪽 방향을 보게 하는것이 1번!
         //2D라서 저는 왼쪽 아님 오른쪽이예요!
@@ -102,8 +134,7 @@ public class CharacterBase : MonoBehaviour
 
         // 목적지 - 출발지 = 목적지를 향해서 가는 방법!
         Vector3 direction = wantPosition - transform.position;
-        //방향의 z축을 제거(2D기 때문!)
-        direction.z = 0;
+
         //그 다음 크기를 1로 변경!
         direction.Normalize();
 
@@ -118,62 +149,22 @@ public class CharacterBase : MonoBehaviour
         };
     }
 
-    //================================================
-    Rigidbody2D rigid;
-    public List<Collider2D> floorList = new List<Collider2D>();
-
-    void Start()
+    protected virtual void Start()
     {
         //제가 모습을 띄고 있는 것이 아니라, 자식이 모습을 가지고 있기 때문에!
         appearance = GetComponentInChildren<AppearanceBase>();
-        rigid = GetComponent<Rigidbody2D>();
     }
-    public virtual void ResetFloor() { floorList.Clear(); }
-    public virtual void AddVelocity(Vector3 force)
-    {
-        if (rigid) rigid.AddForce(force);
-    }
-    public virtual void SetVelocity(Vector3 force)
-    {
-        if (rigid) rigid.velocity = force;
-    }
-    public virtual void SetVerticalVelocity(float force)
-    {
-        if(rigid)
-        {
-            Vector3 result = rigid.velocity;//원본을 가져와서
-            result.y = force;               //y만 바꿀 거구
-            rigid.velocity = result;        //다시 넣어주기
-        };
-    }
-
-    public virtual bool IsGround()
-    {
-        return floorList.Count > 0; //내 발 밑에 뭔가 있는데?
-    }
-
-    //                             부딪힌 대상의 Collider2D컴포넌트
-    //부딪히면 닿아있는 대상 목록 +
-    //떨어지면 닿아있다가 더 이상 아니니까! -
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.isTrigger) return;
-
-        floorList.Add(collision);
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.isTrigger) return;
-
-        floorList.Remove(collision);
-        //발 밑에 더 이상 아무 것도 남지 아니하였을 때!
-        if(floorList.Count <= 0) jumpLeft = jumpCount - 1;
-    }
-    //================================================
+    public virtual void ResetFloor() { }
+    public virtual void AddVelocity(Vector3 force) { }
+    public virtual void SetVelocity(Vector3 force) { }
+    public virtual void SetVerticalVelocity(float force) { }
+    public virtual bool IsGround() { return true; }
 
     public virtual void ClaimJump()             
     {
+        //어.. 나 못움직임..
+        if (isControllable == false || isMovable == false) return;
+
         if(IsGround())
         {
             AddVelocity(Vector3.up * jumpPower);
@@ -194,7 +185,7 @@ public class CharacterBase : MonoBehaviour
     }
 
     public virtual void ClaimRun(bool value)    {}
-    public virtual void ClaimAttack()           { appearance?.SetAttack(); }
+    public virtual void ClaimAttack()           { if(isControllable) appearance?.SetAttack(); }
     public virtual void ClaimSkill()            {}
     public virtual void ClaimRoll()             {}
 

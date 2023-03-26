@@ -12,6 +12,10 @@ PrefabInstance:
       value: 2D_SideScroll_Character
       objectReference: {fileID: 0}
     - target: {fileID: 7821731548038411102, guid: 65afa1a8440c9c049870240185a95c24, type: 3}
+      propertyPath: jumpValue
+      value: 600
+      objectReference: {fileID: 0}
+    - target: {fileID: 7821731548038411102, guid: 65afa1a8440c9c049870240185a95c24, type: 3}
       propertyPath: health._max
       value: 500
       objectReference: {fileID: 0}
@@ -71,7 +75,28 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 8303156609016603093, guid: 65afa1a8440c9c049870240185a95c24, type: 3}
+      propertyPath: jumpValue
+      value: 600
+      objectReference: {fileID: 0}
+    - target: {fileID: 8303156609016603093, guid: 65afa1a8440c9c049870240185a95c24, type: 3}
+      propertyPath: health._max
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 8303156609016603093, guid: 65afa1a8440c9c049870240185a95c24, type: 3}
+      propertyPath: characterName
+      value: "\uAE30\uC0AC"
+      objectReference: {fileID: 0}
+    - target: {fileID: 8303156609016603093, guid: 65afa1a8440c9c049870240185a95c24, type: 3}
+      propertyPath: moveSpeedValue
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8303156609016603093, guid: 65afa1a8440c9c049870240185a95c24, type: 3}
+      propertyPath: health._current
+      value: 500
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 7821731548038411102, guid: 65afa1a8440c9c049870240185a95c24, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 65afa1a8440c9c049870240185a95c24, type: 3}
 --- !u!1 &468313285843300422 stripped
 GameObject:

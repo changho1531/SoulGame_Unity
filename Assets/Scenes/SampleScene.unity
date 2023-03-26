@@ -976,7 +976,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 468313285843300417, guid: 9cdf74ed51f268f43a7d29a9c34b2a48, type: 3}
       propertyPath: jumpCount
-      value: 3
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 468313285843300417, guid: 9cdf74ed51f268f43a7d29a9c34b2a48, type: 3}
       propertyPath: jumpValue
@@ -986,9 +986,17 @@ PrefabInstance:
       propertyPath: currentAlly
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 468313285843300417, guid: 9cdf74ed51f268f43a7d29a9c34b2a48, type: 3}
+      propertyPath: moveSpeedValue
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 468313285843300422, guid: 9cdf74ed51f268f43a7d29a9c34b2a48, type: 3}
       propertyPath: m_Name
       value: Warrior (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 468313285843300422, guid: 9cdf74ed51f268f43a7d29a9c34b2a48, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 468313286410784180, guid: 9cdf74ed51f268f43a7d29a9c34b2a48, type: 3}
       propertyPath: m_LocalScale.x
@@ -1021,17 +1029,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 468313285843300422, guid: 9cdf74ed51f268f43a7d29a9c34b2a48, type: 3}
   m_PrefabInstance: {fileID: 468313285296489973}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1677243828 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 468313285843300417, guid: 9cdf74ed51f268f43a7d29a9c34b2a48, type: 3}
-  m_PrefabInstance: {fileID: 468313285296489973}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1677243827}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 99757bfa4b5f6c84a97c9e420d781e4e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1677243832
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1044,7 +1041,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 536472f08e894f543843ba379d50f949, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  controlTarget: {fileID: 1677243828}
+  controlTarget: {fileID: 0}
 --- !u!1 &2054306441
 GameObject:
   m_ObjectHideFlags: 0
@@ -1246,6 +1243,14 @@ PrefabInstance:
     - target: {fileID: 468313286410784180, guid: 9cdf74ed51f268f43a7d29a9c34b2a48, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1858064582570779338, guid: 9cdf74ed51f268f43a7d29a9c34b2a48, type: 3}
+      propertyPath: jumpValue
+      value: 600
+      objectReference: {fileID: 0}
+    - target: {fileID: 1858064582570779338, guid: 9cdf74ed51f268f43a7d29a9c34b2a48, type: 3}
+      propertyPath: moveSpeedValue
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9cdf74ed51f268f43a7d29a9c34b2a48, type: 3}
