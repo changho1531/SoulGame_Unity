@@ -31,9 +31,9 @@ public class PlayerController : ControllerBase
         if (InputManager.movement.magnitude > 0)
         {
             //움직여달라!               너의 위치에서                  +   움직이려는 양
-            controlTarget.ClaimMove(controlTarget.transform.position + InputManager.movement);
+            controlTarget.ClaimMove(controlTarget.transform.position + GetPlayerMovement());
         };
-        if(InputManager.GetKeyDown(KeyType.Jump))
+        if (InputManager.GetKeyDown(KeyType.Jump))
         {
             controlTarget.ClaimJump();
         };
@@ -41,5 +41,11 @@ public class PlayerController : ControllerBase
         {
             controlTarget.ClaimAttack();
         };
+    }
+
+    //플레이어는 어디로 이동하고 싶어하는가?
+    protected virtual Vector3 GetPlayerMovement()
+    {
+        return InputManager.movement;
     }
 }

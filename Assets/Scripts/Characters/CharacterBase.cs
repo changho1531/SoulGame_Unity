@@ -39,6 +39,10 @@ public class CharacterBase : MonoBehaviour
 
     //내가 바라보고 있는 방향!
     public Vector3 lookForward = Vector3.right;
+
+    //어디로 움직이고 있는가?
+    public Vector3 moveVector;
+
     //velocity : 속도
     public Vector3 velocity { get; protected set; }
 
@@ -47,6 +51,9 @@ public class CharacterBase : MonoBehaviour
 
     //내가 움직이고 있는지 여부!
     protected bool isMove = false;
+
+    //움직임에 따라서 회전을 할 것인가?
+    public bool isRotateByMove = true;
 
     //컨트롤을 하는데요, 스택이 쌓여있으면 컨트롤이 불가능한 상태입니다!
     //                     bool            byte
@@ -110,7 +117,7 @@ public class CharacterBase : MonoBehaviour
         if(isMove && isControllable && isMovable)
         {
             // 거리 = 속도 * 시간
-            transform.position += lookForward * moveSpeedValue * Mathf.Max(moveSpeedMultiplier, 0.1f) * passedTime;
+            transform.position += moveVector * moveSpeedValue * Mathf.Max(moveSpeedMultiplier, 0.1f) * passedTime;
 
             //내가 움직인 시간의 스탬프를 찍어놓는 거죠!
             lastMoveTime = Time.time;
@@ -142,8 +149,11 @@ public class CharacterBase : MonoBehaviour
         if(direction.magnitude > 0)
         {
             //넣어주는 것까지 하셔야 해요!
-            lookForward = direction;
-        
+            moveVector = direction;
+
+            //움직임에 따라 회전하는 친구라면 그제서야 회전을 할 수 있게끔!
+            if (isRotateByMove) lookForward = moveVector;
+
             //네! 이제 움직일래요!
             isMove = true;
         };

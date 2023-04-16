@@ -13,18 +13,26 @@ public class InputManager : MonoBehaviour
     }
     public InputStruct[] inputs;
     public static Vector3 movement = Vector3.zero;
+    public static Vector3 mouseMove = Vector3.zero;
 
     protected static byte[] keyValues = new byte[(int)KeyType.Length];
 
     protected static bool[] keyDown   = new bool[(int)KeyType.Length];
     protected static bool[] keyUp     = new bool[(int)KeyType.Length];
 
+    //메뉴 눌림!
+    public static bool menuDown { get; protected set; }
 
     //                                             현재 키가 1개 이상 눌려져있는 경우!
     public static bool GetKey(KeyType wantKey)     { return keyValues[(int)wantKey] > 0; }
 
     public static bool GetKeyDown(KeyType wantKey) { return keyDown[(int)wantKey]; }
     public static bool GetKeyUp(KeyType wantKey)   { return keyUp[(int)wantKey]; }
+
+    void Start()
+    {
+        for (int i = 0; i < (int)KeyType.Length; i++) keyValues[i] = 0;
+    }
 
     void Update()
     {
@@ -33,6 +41,10 @@ public class InputManager : MonoBehaviour
         {
             keyDown[i] = keyUp[i] = false;
         };
+
+        mouseMove.x = Input.GetAxis("Mouse X");
+        mouseMove.y = Input.GetAxis("Mouse Y");
+        menuDown = Input.GetKeyDown(KeyCode.Escape);
 
         //inputs 입력을 써놓은 애들!
         //해당 친구들을 전부 돌아주기!

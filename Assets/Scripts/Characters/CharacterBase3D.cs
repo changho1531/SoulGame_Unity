@@ -7,6 +7,20 @@ public class CharacterBase3D : CharacterBase
     Rigidbody rigid;
     public List<Collider> floorList = new List<Collider>();
 
+    //수평 각도
+    public float HorizontalAngle
+    {
+        get => lookForward.GetHorizontalAngle();
+        set => lookForward = lookForward.ToAngularVector(value, VerticalAngle);
+    }
+
+    //수직 각도
+    public float VerticalAngle
+    {
+        get => lookForward.GetVerticalAngle();
+        set => lookForward = lookForward.ToAngularVector(HorizontalAngle, Mathf.Clamp(value, -80, 80));
+    }
+
     protected override void Start()
     {
         base.Start();
