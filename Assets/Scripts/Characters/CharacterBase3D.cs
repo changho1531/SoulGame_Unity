@@ -5,6 +5,7 @@ using UnityEngine;
 public class CharacterBase3D : CharacterBase
 {
     Rigidbody rigid;
+    WeaponBase weapon;
     public List<Collider> floorList = new List<Collider>();
 
     //수평 각도
@@ -25,6 +26,22 @@ public class CharacterBase3D : CharacterBase
     {
         base.Start();
         rigid = GetComponent<Rigidbody>();
+        weapon = GetComponentInChildren<WeaponBase>();
+    }
+
+    public override void ClaimAttack()
+    {
+        //쏘려는 목표위치!                 일단 제 눈에서 시작!
+        Vector3 objectPoint = transform.position + (Vector3.up * 1.8f);
+        //앞으로 이동! 자주 교전이 일어나는 거리만큼 떨어뜨려주시면 됩니다!
+        objectPoint += lookForward * 50.0f;
+
+        //(무기가 없으면 애니메이션으로 때리는 경우!   ex: 2D캐릭터)
+        //무기가 없거나 무기가 있어서 발사에 성공했을 때!
+        if (!weapon || (weapon && weapon.Shot(objectPoint)))
+        {
+            base.ClaimAttack();
+        };
     }
 
     public override void ClaimMove(Vector3 wantPosition)

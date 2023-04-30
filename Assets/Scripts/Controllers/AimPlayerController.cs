@@ -51,7 +51,13 @@ public class AimPlayerController : PlayerController
                 if(InputManager.menuDown)
                 {
                     Cursor.lockState = CursorLockMode.None;
+                }
+                /*
+                else if (Input.GetMouseButtonDown(0))
+                {
+                    character3D.ClaimAttack();
                 };
+                */
             };
         };
     }

@@ -94,12 +94,16 @@ public class GameManager : MonoBehaviour
             //이 인스턴스는 파괴되어야 해요!
             Destroy(this);
         };
+        //게임 시작함과 동시에 풀링을 실행합시다!
+        //지금은 여기서 하지만, 맵을 로딩할 때 해주세요!
+        GetComponent<PoolManager>().InitializePool();
     }
 
     // 게임을 할 때에 프레임을 굉장히 신경쓰죠?
     // 30Fps이라고 하면 최적화 실환가..
     // 1초에 몇 번 계산하는가? 프레임!
     // 업데이트라고 하는 친구는 프레임마다 할 일을 이야기합니다!
+    //안녕 테스트~~
     void Update()
     {
     }
