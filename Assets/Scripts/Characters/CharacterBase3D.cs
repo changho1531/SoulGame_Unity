@@ -53,6 +53,17 @@ public class CharacterBase3D : CharacterBase
         base.ClaimMove(wantPosition);
     }
 
+    protected override void OnMove(float passedTime)
+    {
+        //움직이는 대로 돌겠습니다! 움직이고 있다면!
+        if(isRotateByMove && isMove)
+        {
+            //움직이는 방향(MoveVector)쪽으로 바라보기!
+            transform.LookAt(transform.position + moveVector);
+        };
+        base.OnMove(passedTime);
+    }
+
     public override void ResetFloor() { floorList.Clear(); }
     public override void AddVelocity(Vector3 force)
     {

@@ -27,6 +27,11 @@ public class AppearanceBase : MonoBehaviour
         targetAnimator.SetFloat("VerticalSpeed", targetCharacter.velocity.y);
     }
 
+    public virtual void SetDie()
+    {
+        targetAnimator.SetTrigger("Die");
+    }
+
     public virtual void SetAttack()
     {
         targetAnimator.SetTrigger("Attack");

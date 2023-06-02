@@ -84,7 +84,8 @@ public class CharacterBase : MonoBehaviour
 
     //                   마지막으로 움직인 시간과의 차이가  판단 시간보다 큰 경우! : 직전 판단에선 안 움직였네?
     public bool Moving => Time.time - lastMoveTime <= Time.fixedDeltaTime;
-
+    //                   죽었을 때 무엇을 할까요?
+    public bool IsDie => health.Current <= 0;
 
     //Update는 종류가 3가지!
     //Update      : 게임 프레임에 맞춰 업데이트!
@@ -204,9 +205,13 @@ public class CharacterBase : MonoBehaviour
     {
         //대상이 있긴 있는데, 쟤 나랑 동맹인데?
         if (from && from.currentAlly == this.currentAlly) return;
-
+        //아.. 나 이제 생명력 없어ㅜㅜ
+        if (health.Current <= 0) return;
         //생명력을 줄입시다!
         health.Current -= damage;
+
+        //아깐.. 생명력 있었는데.. 이젠 없구나...
+        if (health.Current <= 0) Die();
     }
     public virtual void TakeHeal(CharacterBase from, float heal)
     {
@@ -215,5 +220,14 @@ public class CharacterBase : MonoBehaviour
 
         //생명력을 줄입시다!
         health.Current += heal;
+    }
+    protected virtual void Die()
+    {
+        appearance?.SetDie();
+        //이 친구는 이제 영원히.. 컨트롤 불가..
+        //만약 다시 살리려면 컨트롤 여부를 다시 켜주시면 됩니다!
+        isControllable = false;
+
+        PoolManager.Destroy(gameObject, 3.0f);
     }
 }

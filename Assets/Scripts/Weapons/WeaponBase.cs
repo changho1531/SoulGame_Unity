@@ -57,12 +57,54 @@ public class WeaponBase : MonoBehaviour
         {
             if(muzzleFire && muzzleObject)
             {
-                GameObject created = Instantiate(muzzleFire, muzzleObject.transform);
+                GameObject created = PoolManager.Instantiate(muzzleFire);
+                //부모 설정!
+                created.transform.SetParent(muzzleObject.transform);
+                //위치도 총구 위치 그대로!
+                created.transform.localPosition = Vector3.zero;
+                //회전도 총구 회전 그대로!
+                created.transform.localRotation = Quaternion.identity;
+                //크기도 총구 크기 그대로!
+                created.transform.localScale    = Vector3.one;
+
                 //바로 없애는 게 아니라 0.5초 기다렸다가 없앨 수 있으니까!
-                Destroy(created, 0.5f);
+                PoolManager.Destroy(created, 0.5f);
             };
             //발사했으니까 쿨다운시간은 현재시간 + 발사간격
             //                          3초        0.2초  = 3.2초
+
+            //선을 발사해서 맞은 친구를 돌려주는 거예요!
+            RaycastHit hit;
+
+            //선을 미리 정의합시다!
+            Ray shotRay = new Ray();
+            //    시작위치    총구가 있으면?           총구위치로!             없으면 그냥 여기서!
+            shotRay.origin = muzzleObject ? muzzleObject.transform.position : transform.position;
+            //       방향        목적지 - 출발지
+            shotRay.direction = targetPosition - shotRay.origin;
+
+            //레이캐스트는 어떤 요건인가 생각해보는 거예요!
+            //선을 발사하는 건 "물리"요소중에서 확인하는 거예요!
+            Physics.Raycast(shotRay, out hit);
+
+            //부딪힌 대상이 있어야겠죠!
+            if(hit.collider)
+            {
+                GameObject created = PoolManager.Instantiate(bulletEffect);
+                //맞은 곳으로 이펙트를 이동시키기!
+                created.transform.position = hit.point;
+                //look at : 바라보다!                 노말 : 평면의 방향
+                created.transform.LookAt(hit.point + hit.normal);
+
+                PoolManager.Destroy(created, 0.5f);
+
+                CharacterBase asCharacter = hit.transform.GetComponentInParent<CharacterBase>();
+                if(asCharacter)
+                {
+                    asCharacter.TakeDamage(null, damage);
+                };
+            };
+
             coolDown = Time.time + rapid;
             return true;
         }

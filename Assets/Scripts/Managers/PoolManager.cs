@@ -51,6 +51,31 @@ public class PoolManager : MonoBehaviour
     //                   Key,          Value
     //                  프리팹     대기열 인스턴스 
     public static Dictionary<GameObject, Queue<GameObject>> disableQueue;
+    //풀링용 오브젝트의 부모를 확인해보죠!
+    public static Dictionary<GameObject, Transform> rootDictionary = new Dictionary<GameObject, Transform>();
+
+    //인스턴스를 확인하는 용도만!
+    protected static PoolManager _instance;
+    public static PoolManager Instance
+    {
+        get
+        {
+            //없는데?
+            if(_instance == null)
+            {
+                //찾아봐!
+                _instance = FindObjectOfType<PoolManager>();
+                //진짜 없다니까?
+                if(_instance == null)
+                {
+                    //그럼 만들어야지!
+                    GameObject obj = new GameObject("PoolManager");
+                    _instance = obj.AddComponent<PoolManager>();
+                };
+            }
+            return _instance;
+        }
+    }      
 
     public void InitializePool()
     {
@@ -77,6 +102,8 @@ public class PoolManager : MonoBehaviour
             //대기열 서버를 만들어야 유저가 접속을 하겠죠?
             Queue<GameObject> waitQueue = new Queue<GameObject>();
 
+            //부모를 미리 등록해놓기!
+            rootDictionary.Add(info.prefab, currentRoot);
             //없으니까 추가해주기!
             disableQueue.Add(info.prefab, waitQueue);
 
@@ -125,10 +152,40 @@ public class PoolManager : MonoBehaviour
             target.SetActive(false);
             //꺼준 대기열에 들어가는 것이죠!
             disableQueue[asPool.originPrefab].Enqueue(target);
+            target.transform.SetParent(rootDictionary[asPool.originPrefab]);
         }
         else
         {
             GameObject.Destroy(target);
         };
+    }
+
+    public static void Destroy(GameObject target, float wantTime)
+    {
+        //코루틴은 항상 스타트코루틴으로 하셔야 해요!
+        Instance.StartCoroutine(Instance.DestroyCoroutine(target, wantTime));
+    }
+
+    //코루틴입니다.
+    //스크립트가 돌고 있을 때, 동시에 같이 도는 친구!
+    //게임 도는데 옆에서 따로 할 일을 하고 있는 거예요!
+    //업-업-업-업-업-업-업-업
+    //업-코-업-코-업-코-업-코
+    //그래서 조심해서 쓰시고 최대한 안 쓰시고...
+    //근데 아주 편해요..ㅎㅎ
+    //아주 직관적입니다..
+    //반환값이 들어가는 자리! 이걸 진짜로 반환해줘요!
+    //IEnumerator를 StartCoroutine으로 돌리는 식!
+    //코루틴을 관리하시려면 이렇게 저장해놓으시면 돼요!
+    //IEnumerator currentCoroutine = DestroyCoroutine(null, 3);
+    IEnumerator DestroyCoroutine(GameObject target, float wantTime)
+    {
+        //원하는 시간만큼 코드를 "기다려" 줄 수 있습니다!
+        //"양보"하라니?
+        //yield return은 함수가 끝나지 않습니다!
+        //기다렸다가 다음 코드를 실행하는 용도로 쓰시는 거예요!
+        yield return new WaitForSeconds(wantTime);
+        //그래서 그 시간 기다리고 Destroy실행하기!
+        PoolManager.Destroy(target);
     }
 }
